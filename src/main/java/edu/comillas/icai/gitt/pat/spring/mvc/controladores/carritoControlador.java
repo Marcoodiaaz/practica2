@@ -26,7 +26,7 @@ public class carritoControlador {
         return Collections.singletonList(carritos.get(idCarrito));
     }
     @DeleteMapping("/api/carrito/{idCarrito}")
-    public List<Carrito> borrarCarrito(@PathVariable int idCarrito){
+    public void borrarCarrito(@PathVariable int idCarrito){
         carritos.remove(idCarrito);
     }
 
