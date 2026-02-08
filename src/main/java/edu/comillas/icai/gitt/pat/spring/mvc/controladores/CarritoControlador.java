@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
 @RestController
-public class carritoControlador {
+public class CarritoControlador {
     private final Map<Integer, Carrito> carritos = new HashMap<>();
 
     @PostMapping("/api/carrito")
@@ -18,24 +18,28 @@ public class carritoControlador {
     }
 
     @GetMapping("/api/carrito")
-    public List<Carrito> getCarritos(){
-        return (List<Carrito>) carritos.values();
+    public List<Carrito> getCarritos() {
+        return new ArrayList<>(carritos.values());
     }
+
     @GetMapping("/api/carrito/{idCarrito}")
     public ResponseEntity<Carrito> getCarrito(@PathVariable int idCarrito) {
         Carrito c = carritos.get(idCarrito);
         return (c != null) ? ResponseEntity.ok(c) : ResponseEntity.notFound().build();
     }
+
     @DeleteMapping("/api/carrito/{idCarrito}")
-    public void borrarCarrito(@PathVariable int idCarrito){
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void borrarCarrito(@PathVariable int idCarrito) {
         carritos.remove(idCarrito);
     }
 
-
     @PutMapping("/api/carrito/{idCarrito}")
-    public Carrito modificaCarrito(@PathVariable Integer idCarrito,@RequestBody Carrito carrito) {
-        carritos.put(idCarrito,carrito);
-        return carrito;
+    public ResponseEntity<Carrito> modificaCarrito(@PathVariable Integer idCarrito, @RequestBody Carrito carrito) {
+        if (!carritos.containsKey(idCarrito)) {
+            return ResponseEntity.notFound().build();
+        }
+        carritos.put(idCarrito, carrito);
+        return ResponseEntity.ok(carrito);
     }
 }
-
